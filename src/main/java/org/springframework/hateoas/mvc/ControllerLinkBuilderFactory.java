@@ -64,6 +64,7 @@ import org.springframework.web.util.UriTemplate;
  * @author Oemer Yildiz
  * @author Kevin Conaway
  * @author Andrew Naydyonock
+ * @author Greg Turnquist
  */
 public class ControllerLinkBuilderFactory implements MethodLinkBuilderFactory<ControllerLinkBuilder> {
 
@@ -136,6 +137,7 @@ public class ControllerLinkBuilderFactory implements MethodLinkBuilderFactory<Co
 		Method method = invocation.getMethod();
 
 		String mapping = DISCOVERER.getMapping(invocation.getTargetType(), method);
+
 		UriComponentsBuilder builder = ControllerLinkBuilder.getBuilder().path(mapping);
 
 		UriTemplate template = new UriTemplate(mapping);
@@ -183,10 +185,10 @@ public class ControllerLinkBuilderFactory implements MethodLinkBuilderFactory<Co
 			variables = variables.concat(variable);
 		}
 
-		return new ControllerLinkBuilder(components, variables);
+		return new ControllerLinkBuilder(components, variables, invocation);
 	}
 
-	/* 
+	/*
 	 * (non-Javadoc)
 	 * @see org.springframework.hateoas.MethodLinkBuilderFactory#linkTo(java.lang.reflect.Method, java.lang.Object[])
 	 */
@@ -194,6 +196,8 @@ public class ControllerLinkBuilderFactory implements MethodLinkBuilderFactory<Co
 	public ControllerLinkBuilder linkTo(Method method, Object... parameters) {
 		return ControllerLinkBuilder.linkTo(method, parameters);
 	}
+
+
 
 	/**
 	 * Applies the configured {@link UriComponentsContributor}s to the given {@link UriComponentsBuilder}.
